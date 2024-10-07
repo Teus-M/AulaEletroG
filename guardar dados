@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main(){
+
+int idade;
+//comando para entrada de dados [scanf();] 
+
+printf("informe sua idade:");
+scanf("%d" ,&idade); 
+printf("sua idade e: %d" ,idade);
+
+}
