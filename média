@@ -1,0 +1,31 @@
+#include<stdio.h>
+
+int main (){
+
+float n1, n2, n3, n4, m;
+
+printf("Digite a nota do primeiro bimestre: ");
+scanf("%f", &n1);
+
+printf("Digite a nota do segundo bimestre: ");
+scanf("%f", &n2);
+
+printf("Digite a nota do terceiro bimestre: ");
+scanf("%f", &n3);
+
+printf("Digite a nota do quarto bimestre: ");
+scanf("%f", &n4);
+
+m = (n1 + n2 + n3 + n4)/4;
+
+if ( m >= 7 ){
+    printf ("PARABENS, aprovadoo!! ");
+
+} else if ( 4 <= m < 7 ){
+    printf ("KKKKKK RECUPERACAO ");
+
+} else if (m > 4){
+    printf  ("HAHAHA MLK TA DE PROVA FINAL ");
+}
+
+}
