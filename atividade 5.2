@@ -1,0 +1,33 @@
+#include <cstdio>  // Para usar printf e scanf
+
+int main() {
+    int n;  // Variável para armazenar o número de pacientes
+    int idade;  // Variável para armazenar a idade de cada paciente
+    int mais_idoso = -1;  // Variável para armazenar a idade do paciente mais idoso, começa com valor inválido (-1)
+
+    // Solicita o número de pacientes
+    printf("Informe o número de pacientes: ");
+    scanf("%d", &n);  // Lê o número de pacientes
+
+    // Verifica se o número de pacientes é válido
+    if (n <= 0) {
+        printf("Número de pacientes deve ser maior que 0!\n");
+        return 1;  // Encerra o programa com erro
+    }
+
+    // Loop para ler as idades dos pacientes
+    for (int i = 1; i <= n; i++) {
+        printf("Informe a idade do paciente %d: ", i);
+        scanf("%d", &idade);  // Lê a idade do paciente
+
+        // Verifica se a idade inserida é maior que a já registrada
+        if (idade > mais_idoso) {
+            mais_idoso = idade;  // Atualiza a maior idade
+        }
+    }
+
+    // Exibe a maior idade
+    printf("A idade do paciente mais idoso é: %d\n", mais_idoso);
+
+    return 0;
+}
