@@ -1,0 +1,24 @@
+#include <stdio.h>  // Para usar printf e scanf
+
+int main() {
+    float capital, juros, montante;
+
+    // Solicita o valor do capital inicial
+    printf("capital? ");
+    scanf("%f", &capital);
+
+    // Solicita a taxa de juros mensal
+    printf("juros? ");
+    scanf("%f", &juros);
+
+    // Inicializa o montante com o capital
+    montante = capital;
+
+    // Calcula e exibe o montante para cada mês
+    for (int mes = 1; mes <= 3; mes++) {
+        montante = montante * (1 + juros / 100);  // Aplica o juros sobre o montante do mês anterior
+        printf("mes %d: %.2f\n", mes, montante);  // Exibe o montante com 2 casas decimais
+    }
+
+    return 0;
+}
