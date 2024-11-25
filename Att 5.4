@@ -1,0 +1,36 @@
+#include <stdio.h>  // Para usar printf e scanf
+
+int main() {
+    int total_eleitores, votos_a = 0, votos_b = 0, votos_c = 0, votos_nulos = 0;
+    char voto;
+
+    // Solicita o número de eleitores
+    printf("total de eleitores? ");
+    scanf("%d", &total_eleitores);
+
+    // Processa os votos dos eleitores
+    for (int i = 1; i <= total_eleitores; i++) {
+        printf("voto %d? ", i);
+        scanf(" %c", &voto);  // O espaço antes de %c é para consumir qualquer caractere de nova linha pendente
+
+        // Verifica o voto
+        if (voto == 'A') {
+            votos_a++;
+        } else if (voto == 'B') {
+            votos_b++;
+        } else if (voto == 'C') {
+            votos_c++;
+        } else {
+            votos_nulos++;
+        }
+    }
+
+    // Exibe o resultado da eleição
+    printf("resultado:\n");
+    printf("A..................: %d\n", votos_a);
+    printf("B..................: %d\n", votos_b);
+    printf("C..................: %d\n", votos_c);
+    printf("nulos..............: %d\n", votos_nulos);
+
+    return 0;
+}
