@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_PRODUTOS 100
+
+int ids[MAX_PRODUTOS];
+char nomes[MAX_PRODUTOS][50];
+int quantidades[MAX_PRODUTOS];
+float precos[MAX_PRODUTOS];
+int count = 0;
+
+void listarProdutos() {
+    printf("ID\tNome\tQuantidade\tPreco\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d\t%s\t%d\t%.2f\n", ids[i], nomes[i], quantidades[i], precos[i]);
+    }
+}
+
+int buscarPorID(int id) {
+    for (int i = 0; i < count; i++) {
+        if (ids[i] == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void buscarPorNome(char nome[]) {
+    
+    printf("Produtos encontrados:\n");
+    for (int i = 0; i < count; i++) {
+        if (strstr(nomes[i], nome) != NULL) {
+            printf("ID: %d, Nome: %s, Quantidade: %d, Preco: %.2f\n", ids[i], nomes[i], quantidades[i], precos[i]);
+        }
+    }
+}
+
+float calcularValorTotal() {
+    float total = 0;
+    for (int i = 0; i < count; i++) {
+        total += quantidades[i] * precos[i];
+    }
+    return total;
+}
+
+int main() {
+    int opcao;
+
+    do {
+        printf("Menu:\n");
+        printf("1. Cadastrar produto\n");
+        printf("2. Listar produtos\n");
+        printf("3. Atualizar estoque\n");
+        printf("4. Buscar produto por ID\n");
+        printf("5. Buscar produto por nome\n");
+        printf("6. Excluir produto\n");
+        printf("7. Calcular valor total em estoque\n");
+        printf("8. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1: {
+                if (count < MAX_PRODUTOS) {
+                    ids[count] = count + 1;
+                    printf("Digite o nome do produto: ");
+                    scanf("%s", nomes[count]);
+                    printf("Digite a quantidade em estoque: ");
+                    scanf("%d", &quantidades[count]);
+                    printf("Digite o preco do produto: ");
+                    scanf("%f", &precos[count]);
+                    count++;
+                } else {
+                    printf("Limite de produtos atingido!\n");
+                }
+                break;
+            }
+            case 2:
+                listarProdutos();
+                break;
+            case 3: {
+                int id, novaQuantidade;
+
+                printf("Digite o ID do produto para atualizar o estoque: ");
+                scanf("%d", &id);
+
+                int index = buscarPorID(id);
+
+                if (index != -1) {
+                    printf("Digite a nova quantidade: ");
+                    scanf("%d", &novaQuantidade);
+                    if (novaQuantidade >= 0) {
+                        quantidades[index] = novaQuantidade;
+                    } else {
+                        printf("Quantidade nao pode ser negativa!\n");
+                    }
+                } else {
+                    printf("Produto nao encontrado!\n");
+                }
+                break;
+            }
+            case 4: {
+                int id;
+                printf("Digite o ID do produto para buscar: ");
+                scanf("%d", &id);
+                int index = buscarPorID(id);
+                if (index != -1) {
+                    printf("ID: %d, Nome: %s, Quantidade: %d, Preco: %.2f\n", 
+                           ids[index], nomes[index], quantidades[index], precos[index]);
+                } else {
+                    printf("Produto nao encontrado!\n");
+                }
+                break;
+            }
+            case 5: {
+                char nome[50];
+                printf("Digite o nome do produto para buscar: ");
+                scanf("%s", nome);
+                buscarPorNome(nome);
+                break;
+            }
+            case 6: {
+                int id;
+                printf("Digite o ID do produto para excluir: ");
+                scanf("%d", &id);
+                int index = buscarPorID(id);
+                if (index != -1) {
+                    for (int i = index; i < count - 1; i++) {
+                        ids[i] = ids[i + 1];
+                        strcpy(nomes[i], nomes[i + 1]);
+                        quantidades[i] = quantidades[i + 1];
+                        precos[i] = precos[i + 1];
+                    }
+                    count--;
+                    printf("Produto excluido com sucesso!\n");
+                } else {
+                    printf("Produto nao encontrado!\n");
+                }
+                break;
+            }
+            case 7:
+                printf("Valor total em estoque: R$%.2f\n", calcularValorTotal());
+                break;
+            case 8:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+
+    } while (opcao != 8);
+
+    return 0;
+}
