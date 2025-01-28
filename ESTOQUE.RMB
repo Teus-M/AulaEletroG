@@ -1,0 +1,165 @@
+#include <stdio.h>  // Biblioteca padrão para entrada e saída
+#include <string.h> // Biblioteca para manipulação de strings
+
+#define MAX_PRODUTOS 100 // Define o número máximo de produtos que podem ser cadastrados
+
+// Arrays globais para armazenar as informações dos produtos
+int ids[MAX_PRODUTOS];              // Armazena os IDs dos produtos
+char nomes[MAX_PRODUTOS][50];       // Armazena os nomes dos produtos (cada produto pode ter até 50 caracteres)
+int quantidades[MAX_PRODUTOS];      // Armazena as quantidades disponíveis de cada produto
+float precos[MAX_PRODUTOS];         // Armazena os preços dos produtos
+int count = 0;                      // Contador de produtos cadastrados (inicia em 0)
+
+// Função para listar todos os produtos cadastrados
+void listarProdutos() {
+    printf("ID\tNome\tQuantidade\tPreco\n"); // Cabeçalho da tabela
+    for (int i = 0; i < count; i++) { // Percorre todos os produtos cadastrados
+        // Exibe as informações do produto atual
+        printf("%d\t%s\t%d\t%.2f\n", ids[i], nomes[i], quantidades[i], precos[i]);
+    }
+}
+
+// Função para buscar um produto pelo ID
+int buscarPorID(int id) {
+    for (int i = 0; i < count; i++) { // Percorre todos os produtos cadastrados
+        if (ids[i] == id) { // Verifica se o ID atual é igual ao buscado
+            return i; // Retorna o índice do produto encontrado
+        }
+    }
+    return -1; // Retorna -1 caso o ID não seja encontrado
+}
+
+// Função para buscar produtos pelo nome (ou parte do nome)
+void buscarPorNome(char nome[]) {
+    printf("Produtos encontrados:\n");
+    for (int i = 0; i < count; i++) { // Percorre todos os produtos cadastrados
+        if (strstr(nomes[i], nome) != NULL) { // Verifica se o nome buscado aparece no nome do produto
+            // Exibe as informações do produto encontrado
+            printf("ID: %d, Nome: %s, Quantidade: %d, Preco: %.2f\n", 
+                   ids[i], nomes[i], quantidades[i], precos[i]);
+        }
+    }
+}
+
+// Função para calcular o valor total do estoque (quantidade * preço para cada produto)
+float calcularValorTotal() {
+    float total = 0; // Inicializa o total em 0
+    for (int i = 0; i < count; i++) { // Percorre todos os produtos cadastrados
+        total += quantidades[i] * precos[i]; // Soma o valor total do produto ao total geral
+    }
+    return total; // Retorna o valor total do estoque
+}
+
+// Função principal do programa
+int main() {
+    int opcao; // Variável para armazenar a escolha do usuário no menu
+
+    do {
+        // Menu de opções
+        printf("Menu:\n");
+        printf("1. Cadastrar produto\n");
+        printf("2. Listar produtos\n");
+        printf("3. Atualizar estoque\n");
+        printf("4. Buscar produto por ID\n");
+        printf("5. Buscar produto por nome\n");
+        printf("6. Excluir produto\n");
+        printf("7. Calcular valor total em estoque\n");
+        printf("8. Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao); // Lê a opção escolhida pelo usuário
+
+        switch (opcao) { // Verifica a opção escolhida
+            case 1: { // Cadastrar produto
+                if (count < MAX_PRODUTOS) { // Verifica se ainda há espaço para cadastrar mais produtos
+                    ids[count] = count + 1; // Define o ID como o próximo número disponível
+                    printf("Digite o nome do produto: ");
+                    scanf("%s", nomes[count]); // Lê o nome do produto
+                    printf("Digite a quantidade em estoque: ");
+                    scanf("%d", &quantidades[count]); // Lê a quantidade do produto
+                    printf("Digite o preco do produto: ");
+                    scanf("%f", &precos[count]); // Lê o preço do produto
+                    count++; // Incrementa o contador de produtos cadastrados
+                } else {
+                    printf("Limite de produtos atingido!\n"); // Mensagem de erro se o limite for atingido
+                }
+                break;
+            }
+            case 2: // Listar todos os produtos cadastrados
+                listarProdutos();
+                break;
+            case 3: { // Atualizar a quantidade de um produto
+                int id, novaQuantidade;
+                printf("Digite o ID do produto para atualizar o estoque: ");
+                scanf("%d", &id); // Lê o ID do produto
+
+                int index = buscarPorID(id); // Busca o produto pelo ID
+                if (index != -1) { // Verifica se o produto foi encontrado
+                    printf("Digite a nova quantidade: ");
+                    scanf("%d", &novaQuantidade); // Lê a nova quantidade
+                    if (novaQuantidade >= 0) { // Verifica se a nova quantidade é válida
+                        quantidades[index] = novaQuantidade; // Atualiza a quantidade
+                    } else {
+                        printf("Quantidade nao pode ser negativa!\n"); // Mensagem de erro
+                    }
+                } else {
+                    printf("Produto nao encontrado!\n"); // Mensagem de erro
+                }
+                break;
+            }
+            case 4: { // Buscar um produto pelo ID
+                int id;
+                printf("Digite o ID do produto para buscar: ");
+                scanf("%d", &id); // Lê o ID do produto
+
+                int index = buscarPorID(id); // Busca o produto pelo ID
+                if (index != -1) { // Verifica se o produto foi encontrado
+                    // Exibe as informações do produto encontrado
+                    printf("ID: %d, Nome: %s, Quantidade: %d, Preco: %.2f\n", 
+                           ids[index], nomes[index], quantidades[index], precos[index]);
+                } else {
+                    printf("Produto nao encontrado!\n"); // Mensagem de erro
+                }
+                break;
+            }
+            case 5: { // Buscar produtos pelo nome
+                char nome[50];
+                printf("Digite o nome do produto para buscar: ");
+                scanf("%s", nome); // Lê o nome ou parte do nome do produto
+                buscarPorNome(nome); // Chama a função para buscar produtos pelo nome
+                break;
+            }
+            case 6: { // Excluir um produto pelo ID
+                int id;
+                printf("Digite o ID do produto para excluir: ");
+                scanf("%d", &id); // Lê o ID do produto
+
+                int index = buscarPorID(id); // Busca o produto pelo ID
+                if (index != -1) { // Verifica se o produto foi encontrado
+                    // Desloca os produtos seguintes para "apagar" o produto excluído
+                    for (int i = index; i < count - 1; i++) {
+                        ids[i] = ids[i + 1];
+                        strcpy(nomes[i], nomes[i + 1]);
+                        quantidades[i] = quantidades[i + 1];
+                        precos[i] = precos[i + 1];
+                    }
+                    count--; // Diminui o número total de produtos cadastrados
+                    printf("Produto excluido com sucesso!\n");
+                } else {
+                    printf("Produto nao encontrado!\n"); // Mensagem de erro
+                }
+                break;
+            }
+            case 7: // Calcular o valor total em estoque
+                printf("Valor total em estoque: R$%.2f\n", calcularValorTotal());
+                break;
+            case 8: // Sair do programa
+                printf("Saindo...\n");
+                break;
+            default: // Caso a opção seja inválida
+                printf("Opcao invalida!\n");
+        }
+
+    } while (opcao != 8); // Repete o menu até o usuário escolher a opção de sair
+
+    return 0; // Indica que o programa terminou com sucesso
+}
